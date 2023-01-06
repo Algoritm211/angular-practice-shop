@@ -1,0 +1,44 @@
+<mat-toolbar class="mx-auto justify-between">
+  <a routerLink="home">Home</a>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon
+      [matBadge]="1"
+      matBadgeColor="warn"
+    >shopping_cart
+    </mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <div class="p-3 divide-y divide-solid">
+      <div class="pb-3 flex justify-between">
+        <span class="mr-20">1 items</span>
+        <a routerLink="cart">View Cart</a>
+      </div>
+      <div class="py-2">
+        <div class="flex justify-between font-light mb-2">
+          <span>Rolls-Royce x 1</span>
+          <span class="font-bold">{{ '350' | currency }}</span>
+        </div>
+        <div class="flex justify-between font-light mb-2">
+          <span>Rolls-Royce x 1</span>
+          <span class="font-bold">{{ '350' | currency }}</span>
+        </div>
+        <div class="flex justify-between font-light mb-2">
+          <span>Rolls-Royce x 1</span>
+          <span class="font-bold">{{ '350' | currency }}</span>
+        </div>
+      </div>
+      <div class="flex justify-between py-2">
+        <span class="font-bold">Total:</span>
+        <span>{{ '450' | currency }}</span>
+      </div>
+      <div class="pt-2 flex justify-between">
+        <button mat-button color="warn">
+          <mat-icon>remove_shopping_cart</mat-icon>
+        </button>
+        <button mat-button routerLink="cart" color="primary">
+          <mat-icon>money</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-menu>
+</mat-toolbar>
