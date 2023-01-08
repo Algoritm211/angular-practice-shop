@@ -2,7 +2,8 @@
   <a routerLink="home">Home</a>
   <button mat-icon-button [matMenuTriggerFor]="menu">
     <mat-icon
-      [matBadge]="1"
+      [matBadge]="cartService.itemsQuantity"
+      [matBadgeHidden]="cartService.itemsQuantity === 0"
       matBadgeColor="warn"
     >shopping_cart
     </mat-icon>
@@ -10,29 +11,26 @@
   <mat-menu #menu="matMenu">
     <div class="p-3 divide-y divide-solid">
       <div class="pb-3 flex justify-between">
-        <span class="mr-20">1 items</span>
+        <span class="mr-20">{{cartService.itemsQuantity}} items</span>
         <a routerLink="cart">View Cart</a>
       </div>
-      <div class="py-2">
-        <div class="flex justify-between font-light mb-2">
-          <span>Rolls-Royce x 1</span>
-          <span class="font-bold">{{ '350' | currency }}</span>
-        </div>
-        <div class="flex justify-between font-light mb-2">
-          <span>Rolls-Royce x 1</span>
-          <span class="font-bold">{{ '350' | currency }}</span>
-        </div>
-        <div class="flex justify-between font-light mb-2">
-          <span>Rolls-Royce x 1</span>
-          <span class="font-bold">{{ '350' | currency }}</span>
-        </div>
+      <div *ngIf="(cartService.cart$ | async)!.items.length > 0" class="py-2">
+        <ng-container *ngFor="let cartItem of (cartService.cart$ | async)!.items">
+          <div class="flex justify-between font-light mb-2">
+            <span>{{ cartItem.name }} x {{ cartItem.quantity }}</span>
+            <span class="font-bold">{{ cartItem.price | currency }}</span>
+          </div>
+        </ng-container>
       </div>
       <div class="flex justify-between py-2">
         <span class="font-bold">Total:</span>
-        <span>{{ '450' | currency }}</span>
+        <span>{{ cartService.cartTotalPrice | currency }}</span>
       </div>
       <div class="pt-2 flex justify-between">
-        <button mat-button color="warn">
+        <button
+          (click)="this.cartService.clearCart()"
+          mat-button
+          color="warn">
           <mat-icon>remove_shopping_cart</mat-icon>
         </button>
         <button mat-button routerLink="cart" color="primary">

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {Cart, CartItem} from "../../models/cart.model";
+import {CartService} from "../../../services/cart.service";
 
 @Component({
   selector: 'app-header',
@@ -7,10 +9,10 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class HeaderComponent implements OnInit {
+  cartService = inject(CartService)
 
   constructor() { }
 
   ngOnInit(): void {
   }
-
 }

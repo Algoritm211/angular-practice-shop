@@ -38,11 +38,15 @@
     <ng-container matColumnDef="quantity">
       <th mat-header-cell *matHeaderCellDef>Quantity</th>
       <td mat-cell *matCellDef="let element">
-        <button mat-icon-button>
+        <button
+          (click)="decreaseItemQuantity(element)"
+          [disabled]="element.quantity === 1"
+          mat-icon-button
+        >
           <mat-icon>remove</mat-icon>
         </button>
         {{element.quantity}}
-        <button mat-icon-button>
+        <button (click)="addItemQuantity(element)" mat-icon-button>
           <mat-icon>add</mat-icon>
         </button>
       </td>
@@ -54,17 +58,28 @@
       <th mat-header-cell *matHeaderCellDef>Total</th>
       <td mat-cell *matCellDef="let element"> {{element.quantity * element.price | currency}}</td>
       <td mat-footer-cell *matFooterCellDef>
-        <span class="font-bold">{{ getTotalPrice() | currency }}</span>
+        <span class="font-bold">{{ cartService.cartTotalPrice | currency }}</span>
       </td>
     </ng-container>
 
     <!-- Action Column -->
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>
-        <button mat-raised-button color="warn">Clear all</button>
+        <button
+          (click)="this.cartService.clearCart()"
+          mat-raised-button
+          color="warn"
+        >
+          Clear all
+        </button>
       </th>
       <td mat-cell *matCellDef="let element">
-        <button mat-raised-button color="warn">Remove</button>
+        <button
+          (click)="this.cartService.removeElementFromCart(element.id)"
+          mat-raised-button color="warn"
+        >
+          Remove
+        </button>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <button mat-raised-button color="primary">Go to checkout</button>

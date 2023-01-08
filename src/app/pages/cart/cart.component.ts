@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Cart, CartItem} from "../../shared/models/cart.model";
+import {CartService} from "../../services/cart.service";
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -7,7 +9,9 @@ import {Cart, CartItem} from "../../shared/models/cart.model";
   styles: [
   ]
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
+  cartService = inject(CartService);
+  unsubscribe$ = new Subject<void>()
   cart: Cart = {
     items: [
       {
@@ -41,13 +45,24 @@ export class CartComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.dataSource = this.cart.items;
+    this.cartService.cart$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((_cart) => {
+      this.cart = _cart;
+      this.dataSource = _cart.items;
+    })
   }
 
-
-  getTotalPrice() {
-    return this.cart.items.map((item) => item.price * item.quantity)
-      .reduce((acc, current) => acc + current,0)
+  addItemQuantity(item: CartItem) {
+    this.cartService.addToCart(item);
   }
 
+  decreaseItemQuantity(item: CartItem) {
+    this.cartService.removeItem(item)
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }

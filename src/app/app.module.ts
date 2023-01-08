@@ -21,6 +21,8 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import { ProductBoxComponent } from './pages/home/components/product-box/product-box.component';
 import { CartComponent } from './pages/cart/cart.component';
 import {MatTableModule} from "@angular/material/table";
+import {CartService} from "./services/cart.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -46,9 +48,9 @@ import {MatTableModule} from "@angular/material/table";
     MatExpansionModule,
     MatListModule,
     MatGridListModule,
-    MatTableModule
+    MatTableModule,
   ],
-  providers: [],
+  providers: [CartService, MatSnackBar],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -14,6 +14,7 @@
     >
       <mat-grid-tile>
         <app-product-box
+          (addToCart)="onAddToCart($event)"
           class="w-full"
           [fullWidthMode]="itemsCols === 1"
         ></app-product-box>
