@@ -6,19 +6,26 @@
     <app-filters (showCategory)="onCategoryChange($event)"></app-filters>
   </mat-drawer>
   <mat-drawer-content class="p-6">
-    <app-products-header (columnsCountChange)="onColumnsCountChange($event)"></app-products-header>
+    <app-products-header
+      (sortChange)="onSortChange($event)"
+      (itemsCountChange)="onItemsCountChange($event)"
+      (columnsCountChange)="onColumnsCountChange($event)"
+    ></app-products-header>
     <mat-grid-list
       gutterSize="16"
       [cols]="itemsCols"
       [rowHeight]="rowHeight"
     >
-      <mat-grid-tile>
-        <app-product-box
-          (addToCart)="onAddToCart($event)"
-          class="w-full"
-          [fullWidthMode]="itemsCols === 1"
-        ></app-product-box>
-      </mat-grid-tile>
+      <ng-container *ngFor="let product of products">
+        <mat-grid-tile>
+          <app-product-box
+            [product]="product"
+            (addToCart)="onAddToCart($event)"
+            class="w-full"
+            [fullWidthMode]="itemsCols === 1"
+          ></app-product-box>
+        </mat-grid-tile>
+      </ng-container>
     </mat-grid-list>
   </mat-drawer-content>
 </mat-drawer-container>

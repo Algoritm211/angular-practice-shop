@@ -1,7 +1,8 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CartService} from "../../services/cart.service";
 import {Product} from "../../shared/models/product.model";
-import {MatSnackBarRef} from "@angular/material/snack-bar";
+import {StoreService} from "../../services/store.service";
+import {Subject, takeUntil} from 'rxjs';
 
 const ROWS_HEIGHT: Record<number, number> = { 1: 400, 3: 335, 4: 350 }
 
@@ -9,16 +10,40 @@ const ROWS_HEIGHT: Record<number, number> = { 1: 400, 3: 335, 4: 350 }
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  unsubscribe$ = new Subject<void>()
   itemsCols = 3;
-  category = 'houses'
+  category: string | undefined;
   rowHeight = ROWS_HEIGHT[this.itemsCols];
+  private count = 12
+  sort = 'asc';
+  products: Product[] = [];
 
   cartService = inject(CartService);
+  storeService = inject(StoreService);
 
   constructor() { }
 
   ngOnInit(): void {
+    this.getProducts();
+  }
+
+  getProducts() {
+    this.storeService.getAllProducts(this.count, this.sort, this.category)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((_products) => {
+        this.products = _products;
+      })
+  }
+
+  onItemsCountChange(newCount: number) {
+    this.count = newCount;
+    this.getProducts();
+  }
+
+  onSortChange(newSort: 'asc' | 'desc') {
+    this.sort = newSort;
+    this.getProducts();
   }
 
   onColumnsCountChange(colsNumber: number) {
@@ -28,6 +53,7 @@ export class HomeComponent implements OnInit {
 
   onCategoryChange(category: string) {
     this.category = category;
+    this.getProducts();
   }
 
   onAddToCart(product: Product) {
@@ -38,5 +64,10 @@ export class HomeComponent implements OnInit {
       price: product.price,
       quantity: 1,
     })
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

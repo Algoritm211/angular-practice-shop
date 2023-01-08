@@ -2,21 +2,14 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Product} from "../../../../shared/models/product.model";
 
 @Component({
-  selector: 'app-product-box[fullWidthMode]',
+  selector: 'app-product-box[fullWidthMode][product]',
   templateUrl: './product-box.component.html',
   styles: [
   ]
 })
 export class ProductBoxComponent implements OnInit {
   @Input() fullWidthMode = false;
-  product: Product = {
-    id: '1',
-    title: 'Rolls-Royce',
-    price: 350,
-    category: 'cars',
-    description: 'Amazing car',
-    image: 'https://via.placeholder.com/150',
-  }
+  @Input() product!: Product
 
   @Output() addToCart = new EventEmitter()
 

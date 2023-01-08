@@ -22,7 +22,9 @@ import { ProductBoxComponent } from './pages/home/components/product-box/product
 import { CartComponent } from './pages/cart/cart.component';
 import {MatTableModule} from "@angular/material/table";
 import {CartService} from "./services/cart.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {StoreService} from "./services/store.service";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -49,8 +51,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     MatListModule,
     MatGridListModule,
     MatTableModule,
+    MatSnackBarModule,
+    HttpClientModule,
   ],
-  providers: [CartService, MatSnackBar],
+  providers: [CartService, StoreService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
